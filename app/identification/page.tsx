@@ -40,6 +40,16 @@ export default function IdentificationPage() {
 
       const data = await response.json();
 
+      // Sauvegarder les informations sur Google Drive (en parallèle, ne bloque pas la navigation)
+      fetch('/api/save-candidate-to-drive', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      }).catch(error => {
+        console.error('Erreur lors de la sauvegarde sur Google Drive:', error);
+        // Ne bloque pas le flux même en cas d'erreur
+      });
+
       // Si le candidat a déjà payé, aller directement au test
       if (data.hasPaid) {
         router.push(`/test?candidateId=${data.id}`);
