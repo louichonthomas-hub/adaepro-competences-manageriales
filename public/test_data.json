@@ -1,0 +1,397 @@
+{
+  "title": "Évaluation des Compétences Managériales",
+  "description": "Ce test est conçu pour évaluer plusieurs aspects des compétences managériales.",
+  "instructions": "Une seule réponse par question. Il s'agit de votre PERCEPTION.",
+  "scale": {
+    "type": "likert",
+    "min": 1,
+    "max": 5,
+    "labels": {
+      "1": "Presque jamais",
+      "2": "Parfois",
+      "3": "Régulièrement",
+      "4": "Souvent",
+      "5": "Presque toujours"
+    }
+  },
+  "sections": [
+    {
+      "id": 1,
+      "title": "LEADERSHIP ET VISION",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je communique clairement la vision et les objectifs de l'entreprise à mon équipe."
+        },
+        {
+          "id": 2,
+          "text": "J'inspire et motive mon équipe à atteindre des objectifs ambitieux."
+        },
+        {
+          "id": 3,
+          "text": "Je prends des décisions stratégiques en tenant compte des enjeux à long terme."
+        },
+        {
+          "id": 4,
+          "text": "Je suis capable de fédérer mon équipe autour d'une vision commune."
+        },
+        {
+          "id": 5,
+          "text": "J'adapte mon style de leadership en fonction des situations et des besoins de l'équipe, je fais preuve d'humilité."
+        },
+        {
+          "id": 6,
+          "text": "Je fais preuve de courage managérial lorsque des messages difficiles doivent être transmis."
+        },
+        {
+          "id": 7,
+          "text": "Je suis capable de prendre des initiatives et d'assumer des responsabilités importantes."
+        },
+        {
+          "id": 8,
+          "text": "Je donne du sens au travail quotidien de mes collaborateurs en lien avec la vision de l'entreprise."
+        },
+        {
+          "id": 9,
+          "text": "Je suis un ambassadeur des valeurs de l'entreprise, je fais preuve d'exemplarité."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "COMMUNICATION ET RELATIONS INTERPERSONNELLES",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je communique clairement les attentes à mon équipe."
+        },
+        {
+          "id": 2,
+          "text": "J'écoute activement avec bienveillance les idées et préoccupations de mes collaborateurs."
+        },
+        {
+          "id": 3,
+          "text": "Je fais preuve d'assertivité."
+        },
+        {
+          "id": 4,
+          "text": "Je maintiens un haut niveau d'énergie pour moi-même et mes équipes."
+        },
+        {
+          "id": 5,
+          "text": "J'adapte mon style de communication en fonction des besoins individuels des membres de l'équipe."
+        },
+        {
+          "id": 6,
+          "text": "Je suis capable de maintenir une communication ouverte même dans des situations stressantes."
+        },
+        {
+          "id": 7,
+          "text": "Je fais preuve d'empathie dans mes interactions avec les membres de l'équipe."
+        },
+        {
+          "id": 8,
+          "text": "Je maîtrise et pratique le leadership positif en m'appuyant sur les forces de mon équipe pour atteindre les objectifs."
+        },
+        {
+          "id": 9,
+          "text": "Je respecte mes collaborateurs(trices) en toute circonstance."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "GESTION DES PERFORMANCES ET DÉVELOPPEMENT DES TALENTS",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je challenge mes équipes avec des objectifs SMART (Spécifiques, Mesurables, Atteignables, Réalistes, Temporellement définis) tout en les soutenant."
+        },
+        {
+          "id": 2,
+          "text": "J'identifie et développe efficacement les talents au sein de mon équipe."
+        },
+        {
+          "id": 3,
+          "text": "Je donne régulièrement un feedback constructif à mes collaborateurs."
+        },
+        {
+          "id": 4,
+          "text": "Je mets en place des plans de développement personnalisés pour mes collaborateurs."
+        },
+        {
+          "id": 5,
+          "text": "J'évalue objectivement les performances de mes collaborateurs en utilisant des critères précis."
+        },
+        {
+          "id": 6,
+          "text": "Je suis capable d'identifier les besoins en formation de mon équipe."
+        },
+        {
+          "id": 7,
+          "text": "J'encourage et soutiens le développement professionnel de mes collaborateurs."
+        },
+        {
+          "id": 8,
+          "text": "Je suis capable de gérer efficacement les situations de sous-performance au sein de mon équipe."
+        },
+        {
+          "id": 9,
+          "text": "Je me rends disponible pour appuyer mes équipes."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "GESTION DU CHANGEMENT ET INNOVATION",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je communique clairement la vision et les objectifs du changement à mon équipe."
+        },
+        {
+          "id": 2,
+          "text": "J'identifie et gère efficacement les résistances au changement au sein de mon équipe."
+        },
+        {
+          "id": 3,
+          "text": "J'encourage l'innovation et la prise d'initiative au sein de mon équipe ou département."
+        },
+        {
+          "id": 4,
+          "text": "Je prends en compte les sources de motivation de mon équipe."
+        },
+        {
+          "id": 5,
+          "text": "Je suis capable d'adapter rapidement les stratégies face aux changements du marché ou de l'environnement professionnel."
+        },
+        {
+          "id": 6,
+          "text": "J'implique efficacement mon équipe dans le processus de changement et d'innovation."
+        },
+        {
+          "id": 7,
+          "text": "Je suis capable de planifier et mettre en œuvre des actions concrètes pour faciliter le changement."
+        },
+        {
+          "id": 8,
+          "text": "Je crée un environnement propice à l'innovation et à la créativité au sein de mon équipe."
+        },
+        {
+          "id": 9,
+          "text": "Je suis capable d'évaluer les risques et les opportunités liés au changement et à l'innovation."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "PRISE DE DÉCISION ET RÉSOLUTION DE PROBLÈME",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je prends des décisions éclairées en tenant compte de multiples facteurs et perspectives."
+        },
+        {
+          "id": 2,
+          "text": "J'évalue efficacement les risques et les bénéfices potentiels avant de prendre une décision."
+        },
+        {
+          "id": 3,
+          "text": "Je suis capable de prendre des décisions rapides et efficaces, même face à l'incertitude."
+        },
+        {
+          "id": 4,
+          "text": "J'implique efficacement mon équipe dans la résolution de problèmes complexes."
+        },
+        {
+          "id": 5,
+          "text": "Je garde mon calme et prends du recul face aux problèmes et imprévus."
+        },
+        {
+          "id": 6,
+          "text": "J'analyse efficacement les différentes situations avant de prendre une décision."
+        },
+        {
+          "id": 7,
+          "text": "Je suis capable de prendre des décisions difficiles ou impopulaires lorsqu'elles sont justifiées."
+        },
+        {
+          "id": 8,
+          "text": "Je cultive un état d'esprit orienté \"résolution de problèmes\" dans mon approche managériale."
+        },
+        {
+          "id": 9,
+          "text": "J'anticipe les difficultés et obstacles prévisibles."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "GESTION DU TEMPS ET DES PRIORITÉS",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je suis capable de hiérarchiser efficacement les tâches en fonction de leur importance et de leur urgence."
+        },
+        {
+          "id": 2,
+          "text": "Je planifie systématiquement mes activités et celles de mon équipe à l'avance."
+        },
+        {
+          "id": 3,
+          "text": "Je gère efficacement les interruptions et les distractions dans mon travail quotidien."
+        },
+        {
+          "id": 4,
+          "text": "Je délègue efficacement les tâches à mon équipe en fonction des compétences de chacun."
+        },
+        {
+          "id": 5,
+          "text": "J'utilise des outils de gestion du temps (agendas électroniques, applications) pour optimiser mon organisation."
+        },
+        {
+          "id": 6,
+          "text": "Je suis capable de respecter les délais tout en maintenant la qualité du travail."
+        },
+        {
+          "id": 7,
+          "text": "J'évalue régulièrement l'efficacité de ma gestion du temps et ajuste mes méthodes si nécessaire."
+        },
+        {
+          "id": 8,
+          "text": "Je sais dire non aux demandes qui ne s'alignent pas avec mes priorités ou celles de mon équipe."
+        },
+        {
+          "id": 9,
+          "text": "Je suis ponctuel."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "COMPÉTENCES TECHNIQUES ET OPÉRATIONNELLES",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je maîtrise les processus et outils techniques nécessaires à mon domaine d'activité."
+        },
+        {
+          "id": 2,
+          "text": "Je suis capable d'analyser et d'interpréter efficacement les données pertinentes à mon activité."
+        },
+        {
+          "id": 3,
+          "text": "J'optimise les ressources et les processus pour améliorer l'efficacité opérationnelle."
+        },
+        {
+          "id": 4,
+          "text": "Je suis à jour sur les dernières tendances et innovations dans mon domaine d'expertise."
+        },
+        {
+          "id": 5,
+          "text": "Je suis capable de traduire les objectifs stratégiques en actions opérationnelles concrètes."
+        },
+        {
+          "id": 6,
+          "text": "J'identifie et résous efficacement les problèmes techniques dans mon domaine de responsabilité."
+        },
+        {
+          "id": 7,
+          "text": "Je suis capable de former et de guider techniquement les membres de mon équipe."
+        },
+        {
+          "id": 8,
+          "text": "J'évalue régulièrement l'efficacité des processus opérationnels et les ajuste si nécessaire."
+        },
+        {
+          "id": 9,
+          "text": "J'investis du temps pour améliorer les processus, outils et conditions de travail."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "ENGAGEMENT ET ESPRIT D'ÉQUIPE",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je favorise un environnement de travail collaboratif et solidaire au sein de mon équipe."
+        },
+        {
+          "id": 2,
+          "text": "J'encourage activement le partage d'idées et la participation de tous les membres de l'équipe."
+        },
+        {
+          "id": 3,
+          "text": "Je suis capable de motiver mon équipe, même dans des périodes difficiles."
+        },
+        {
+          "id": 4,
+          "text": "Je reconnais et valorise les contributions individuelles et collectives de mon équipe."
+        },
+        {
+          "id": 5,
+          "text": "Je fais preuve d'équité et de justice, pas de différence de traitement."
+        },
+        {
+          "id": 6,
+          "text": "Je favorise un sentiment d'appartenance et de cohésion au sein de mon équipe."
+        },
+        {
+          "id": 7,
+          "text": "Je gère efficacement les conflits interpersonnels pour maintenir un bon esprit d'équipe."
+        },
+        {
+          "id": 8,
+          "text": "J'implique mon équipe dans la prise de décisions importantes qui les concernent."
+        },
+        {
+          "id": 9,
+          "text": "Je dynamise la coopération de l'équipe transverse, y compris dans la relation à distance."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "INTELLIGENCE ÉMOTIONNELLE",
+      "questions": [
+        {
+          "id": 1,
+          "text": "Je suis capable d'identifier et de comprendre mes propres émotions dans diverses situations professionnelles."
+        },
+        {
+          "id": 2,
+          "text": "Je gère efficacement mes émotions, même dans des situations stressantes ou conflictuelles."
+        },
+        {
+          "id": 3,
+          "text": "Je perçois et comprends facilement les émotions des membres de mon équipe."
+        },
+        {
+          "id": 4,
+          "text": "J'adapte ma communication en fonction de l'état émotionnel de mes interlocuteurs."
+        },
+        {
+          "id": 5,
+          "text": "Je fais preuve d'empathie envers les membres de mon équipe dans diverses situations professionnelles."
+        },
+        {
+          "id": 6,
+          "text": "Je suis capable de motiver et d'inspirer mon équipe, même dans des périodes difficiles."
+        },
+        {
+          "id": 7,
+          "text": "Je m'efforce d'être positif et d'humeur égale."
+        },
+        {
+          "id": 8,
+          "text": "Je prends en compte les aspects émotionnels lors de la prise de décisions importantes."
+        },
+        {
+          "id": 9,
+          "text": "Je gère bien mon stress."
+        }
+      ]
+    }
+  ]
+}

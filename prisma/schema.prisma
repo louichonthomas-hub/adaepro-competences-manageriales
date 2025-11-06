@@ -1,0 +1,89 @@
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/adaepro_competences_manageriales/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Candidate {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  firstName     String?
+  lastName      String?
+  company       String?
+  department    String?
+  position      String?
+  hasPaid       Boolean  @default(false)
+  paymentMethod String?
+  paymentId     String?
+  paymentAmount Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  progress TestProgress?
+  result   TestResult?
+
+  @@index([email])
+}
+
+model TestProgress {
+  id                      String   @id @default(cuid())
+  candidateId             String   @unique
+  currentSection          Int      @default(1)
+  currentQuestion         Int      @default(0)
+  answers                 Json     @default("{}")
+  managementStylesAnswers Json?
+  completed               Boolean  @default(false)
+  completedAt             DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+}
+
+model TestResult {
+  id                String   @id @default(cuid())
+  candidateId       String   @unique
+  section1Score     Float
+  section2Score     Float
+  section3Score     Float
+  section4Score     Float
+  section5Score     Float
+  section6Score     Float
+  section7Score     Float
+  section8Score     Float
+  section9Score     Float
+  totalScore        Float
+  percentageScore   Float
+  managementStyles  Json?
+  radarData         Json
+  narrativeReport   String?  @db.Text
+  createdAt         DateTime @default(now())
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+}
+
+model PaymentTransaction {
+  id              String   @id @default(cuid())
+  candidateEmail  String
+  amount          Float
+  currency        String   @default("EUR")
+  provider        String
+  transactionId   String   @unique
+  status          String
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([candidateEmail])
+  @@index([transactionId])
+}
