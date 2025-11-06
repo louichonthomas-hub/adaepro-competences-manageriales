@@ -2,356 +2,253 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 
 export default function IdentificationPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    company: '',
-    department: '',
-    position: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [errorFirstName, setErrorFirstName] = useState('');
+  const [errorLastName, setErrorLastName] = useState('');
+  const [errorEmail, setErrorEmail] = useState('');
+  const [showResumeDialog, setShowResumeDialog] = useState(false);
+  const [candidateData, setCandidateData] = useState<{ candidateId: string; candidate: any } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
+  const validateEmail = (emailValue: string) => {
+    // Validation plus permissive pour accepter tous les formats standards
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return re.test(emailValue.toLowerCase());
+  };
 
-    try {
-      // Créer ou récupérer le candidat
-      const response = await fetch('/api/candidate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la création du profil');
-      }
-
-      const data = await response.json();
-
-      // Si le candidat a déjà payé, aller directement au test
-      if (data.hasPaid) {
-        router.push(`/test?candidateId=${data.id}`);
-      } else {
-        // Sinon, aller à la page de paiement
-        router.push(`/payment?candidateId=${data.id}`);
-      }
-    } catch (err) {
-      setError('Une erreur est survenue. Veuillez réessayer.');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+  const handleContinueTest = () => {
+    if (candidateData) {
+      router.push(`/payment?candidateId=${candidateData.candidateId}`);
     }
   };
 
-  const dimensions = [
-    { icon: '🎯', name: 'Pilotage' },
-    { icon: '👥', name: 'Animation' },
-    { icon: '💡', name: 'Innovation' },
-    { icon: '🤝', name: 'Collaboration' },
-    { icon: '🌟', name: 'Leadership' },
-    { icon: '📊', name: 'Analyse' },
-    { icon: '🗣️', name: 'Communication' },
-    { icon: '⚡', name: 'Décision' },
-    { icon: '🎓', name: 'Développement' },
-  ];
+  const handleRestartTest = async () => {
+    if (!candidateData) return;
+    
+    setLoading(true);
+    try {
+      await fetch(`/api/test-progress?candidateId=${candidateData.candidateId}`, {
+        method: 'DELETE',
+      });
+      
+      router.push(`/payment?candidateId=${candidateData.candidateId}`);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Une erreur est survenue. Veuillez réessayer.');
+      setLoading(false);
+    }
+  };
 
-  const benefits = [
-    {
-      icon: '✓',
-      title: 'Diagnostic Complet',
-      description: 'Obtenez une vision claire de vos compétences managériales actuelles',
-    },
-    {
-      icon: '✓',
-      title: 'Axes de Progrès',
-      description: 'Identifiez précisément vos points forts et vos opportunités d\'amélioration',
-    },
-    {
-      icon: '✓',
-      title: 'Plan d\'Action',
-      description: 'Recevez des recommandations personnalisées pour votre développement',
-    },
-    {
-      icon: '✓',
-      title: 'Résultats Détaillés',
-      description: 'Accédez à un rapport complet avec visualisations et analyses approfondies',
-    },
-  ];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    setErrorLastName('');
+    setErrorFirstName('');
+    setErrorEmail('');
+    
+    let hasError = false;
+    
+    if (!lastName.trim()) {
+      setErrorLastName('Le nom est requis');
+      hasError = true;
+    }
+    if (!firstName.trim()) {
+      setErrorFirstName('Le prénom est requis');
+      hasError = true;
+    }
+    if (!email.trim()) {
+      setErrorEmail('L\'email est requis');
+      hasError = true;
+    } else if (!validateEmail(email)) {
+      setErrorEmail('Email invalide');
+      hasError = true;
+    }
+    
+    if (hasError) {
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      const response = await fetch('/api/candidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, email }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erreur lors de la création du candidat');
+      }
+      
+      const data = await response.json();
+      
+      if (data.hasProgress) {
+        setCandidateData(data);
+        setShowResumeDialog(true);
+        setLoading(false);
+      } else {
+        router.push(`/payment?candidateId=${data.candidateId}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Une erreur est survenue. Veuillez réessayer.');
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen py-12 px-4" style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)' }}>
-      {/* Header */}
-      <header className="container mx-auto mb-16">
-        <div className="flex items-center gap-5 pb-6 border-b-2" style={{ borderColor: 'rgba(212, 175, 55, 0.3)' }}>
-          <div className="relative w-16 h-16">
-            <Image
-              src="/logo.png"
-              alt="Adaepro"
-              fill
-              className="object-contain"
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8">
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-6">
+            <Image 
+              src="/logo.png" 
+              alt="Adaepro Logo" 
+              width={280} 
+              height={106}
               priority
+              className="h-auto"
             />
           </div>
-          <div className="flex-1">
-            <div className="text-2xl font-bold" style={{ color: '#d4af37' }}>Adaepro</div>
-            <div className="text-base" style={{ color: '#a0a0a0' }}>Test de Compétences Managériales</div>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto max-w-7xl">
-        {/* Hero Section */}
-        <section className="text-center mb-16">
-          <h1 
-            className="text-5xl font-bold mb-6"
-            style={{
-              background: 'linear-gradient(135deg, #d4af37 0%, #f4e5b4 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Évaluation des Compétences Managériales
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Test Compétences Managériales
           </h1>
-          <p className="text-xl max-w-3xl mx-auto" style={{ color: '#b0b0b0' }}>
-            Découvrez vos forces et vos axes de progression à travers une évaluation complète de 9 dimensions clés du management.
+          <p className="text-gray-600 text-sm">
+            Évaluez vos compétences managériales
           </p>
-        </section>
-
-        {/* Main Grid */}
-        <div className="grid lg:grid-cols-2 gap-10 mb-16">
-          {/* Les 9 Dimensions Évaluées */}
-          <Card className="border-2 bg-opacity-5 backdrop-blur-lg transition-all hover:scale-105" 
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  borderColor: 'rgba(212, 175, 55, 0.3)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }}>
-            <CardContent className="p-10">
-              <h2 className="text-3xl font-bold mb-8 flex items-center gap-3" style={{ color: '#d4af37' }}>
-                <span className="text-4xl">🎯</span>
-                Les 9 Dimensions Évaluées
-              </h2>
-              <div className="grid grid-cols-3 gap-5">
-                {dimensions.map((dim, idx) => (
-                  <div
-                    key={idx}
-                    className="p-5 rounded-xl text-center transition-all hover:scale-110"
-                    style={{
-                      background: 'rgba(212, 175, 55, 0.1)',
-                      border: '1px solid rgba(212, 175, 55, 0.3)',
-                    }}
-                  >
-                    <div className="text-4xl mb-2">{dim.icon}</div>
-                    <div className="text-sm font-semibold text-white">{dim.name}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Pourquoi Passer Cette Évaluation */}
-          <Card className="border-2 bg-opacity-5 backdrop-blur-lg transition-all hover:scale-105" 
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  borderColor: 'rgba(212, 175, 55, 0.3)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }}>
-            <CardContent className="p-10">
-              <h2 className="text-3xl font-bold mb-8 flex items-center gap-3" style={{ color: '#d4af37' }}>
-                <span className="text-4xl">💡</span>
-                Pourquoi passer cette évaluation ?
-              </h2>
-              <ul className="space-y-5">
-                {benefits.map((benefit, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-4 p-4 rounded-lg transition-all"
-                    style={{ background: 'rgba(212, 175, 55, 0.05)' }}
-                  >
-                    <span className="text-2xl font-bold flex-shrink-0" style={{ color: '#d4af37' }}>
-                      {benefit.icon}
-                    </span>
-                    <div className="flex-1">
-                      <div className="text-base font-semibold mb-1" style={{ color: '#d4af37' }}>
-                        {benefit.title}
-                      </div>
-                      <div className="text-sm" style={{ color: '#b0b0b0' }}>
-                        {benefit.description}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <p className="text-gray-500 text-xs mt-1">
+            Durée estimée : 15-20 minutes • 9 dimensions évaluées
+          </p>
         </div>
-
-        {/* Formulaire - Prêt à Progresser */}
-        <Card className="border-2 bg-opacity-5 backdrop-blur-lg max-w-5xl mx-auto" 
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                borderColor: 'rgba(212, 175, 55, 0.3)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-              }}>
-          <CardContent className="p-10">
-            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3" style={{ color: '#d4af37' }}>
-              <span className="text-4xl">📝</span>
-              Prêt à progresser ?
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                    Prénom *
-                  </Label>
-                  <Input
-                    id="firstName"
-                    required
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="p-4 text-base border-2 rounded-lg transition-all"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      borderColor: 'rgba(212, 175, 55, 0.3)',
-                      color: '#ffffff',
-                    }}
-                    placeholder="Jean"
-                  />
+        
+        {showResumeDialog && candidateData ? (
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                    Nom *
-                  </Label>
-                  <Input
-                    id="lastName"
-                    required
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="p-4 text-base border-2 rounded-lg transition-all"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      borderColor: 'rgba(212, 175, 55, 0.3)',
-                      color: '#ffffff',
-                    }}
-                    placeholder="Dupont"
-                  />
+                <div className="ml-3 flex-1">
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                    Test en cours détecté
+                  </h3>
+                  <p className="text-sm text-blue-700">
+                    Bonjour <span className="font-semibold">{candidateData.candidate.firstName} {candidateData.candidate.lastName}</span>,
+                    nous avons détecté que vous avez déjà commencé ce test. Souhaitez-vous reprendre où vous vous êtes arrêté ou recommencer ?
+                  </p>
                 </div>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                  Email professionnel *
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="p-4 text-base border-2 rounded-lg transition-all"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderColor: 'rgba(212, 175, 55, 0.3)',
-                    color: '#ffffff',
-                  }}
-                  placeholder="jean.dupont@entreprise.com"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="company" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                  Entreprise
-                </Label>
-                <Input
-                  id="company"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="p-4 text-base border-2 rounded-lg transition-all"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderColor: 'rgba(212, 175, 55, 0.3)',
-                    color: '#ffffff',
-                  }}
-                  placeholder="Nom de votre entreprise"
-                />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <Label htmlFor="department" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                    Département
-                  </Label>
-                  <Input
-                    id="department"
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="p-4 text-base border-2 rounded-lg transition-all"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      borderColor: 'rgba(212, 175, 55, 0.3)',
-                      color: '#ffffff',
-                    }}
-                    placeholder="Direction, Service..."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="position" className="text-sm font-semibold" style={{ color: '#d4af37' }}>
-                    Fonction
-                  </Label>
-                  <Input
-                    id="position"
-                    value={formData.position}
-                    onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                    className="p-4 text-base border-2 rounded-lg transition-all"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      borderColor: 'rgba(212, 175, 55, 0.3)',
-                      color: '#ffffff',
-                    }}
-                    placeholder="Votre fonction actuelle"
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <div className="p-4 rounded-lg text-sm" style={{ background: 'rgba(227, 6, 19, 0.1)', border: '1px solid rgba(227, 6, 19, 0.3)', color: '#ff6b6b' }}>
-                  {error}
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full p-5 text-lg font-bold rounded-xl transition-all hover:scale-105"
-                style={{
-                  background: 'linear-gradient(135deg, #d4af37 0%, #f4e5b4 100%)',
-                  color: '#1a1a1a',
-                  boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
-                }}
-                disabled={isLoading}
+            <div className="space-y-3">
+              <button
+                onClick={handleContinueTest}
+                disabled={loading}
+                className="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                {isLoading ? 'Chargement...' : 'Commencer l\'évaluation'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+                Continuer le test
+              </button>
+              
+              <button
+                onClick={handleRestartTest}
+                disabled={loading}
+                className="w-full bg-white hover:bg-gray-50 text-gray-800 font-semibold py-3 px-6 rounded-lg border-2 border-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Chargement...' : 'Recommencer le test'}
+              </button>
 
-        {/* Footer */}
-        <footer className="text-center pt-12 mt-16 border-t-2" style={{ borderColor: 'rgba(212, 175, 55, 0.3)', color: '#808080' }}>
-          <p>&copy; 2025 Adaepro. Tous droits réservés.</p>
-        </footer>
+              <button
+                onClick={() => {
+                  setShowResumeDialog(false);
+                  setCandidateData(null);
+                }}
+                className="w-full text-gray-600 hover:text-gray-800 text-sm py-2"
+              >
+                Retour
+              </button>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-semibold text-gray-900 mb-1">
+                Nom *
+              </label>
+              <input
+                id="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-transparent outline-none transition"
+                placeholder="Votre nom"
+                disabled={loading}
+              />
+              {errorLastName && (
+                <p className="text-red-600 text-xs mt-1">{errorLastName}</p>
+              )}
+            </div>
+            
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-semibold text-gray-900 mb-1">
+                Prénom *
+              </label>
+              <input
+                id="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-transparent outline-none transition"
+                placeholder="Votre prénom"
+                disabled={loading}
+              />
+              {errorFirstName && (
+                <p className="text-red-600 text-xs mt-1">{errorFirstName}</p>
+              )}
+            </div>
+            
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-1">
+                Email *
+              </label>
+              <input
+                id="email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-transparent outline-none transition"
+                placeholder="votre.email@exemple.com"
+                disabled={loading}
+                autoComplete="email"
+              />
+              {errorEmail && (
+                <p className="text-red-600 text-xs mt-1">{errorEmail}</p>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              {loading ? 'Chargement...' : 'Commencer le test'}
+            </button>
+          </form>
+        )}
+        
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <p className="text-xs text-gray-500 text-center">
+            Vos données sont confidentielles et utilisées uniquement pour générer vos résultats.
+          </p>
+        </div>
       </div>
     </div>
   );

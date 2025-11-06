@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CreditCard, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 function PaymentContent() {
   const router = useRouter();
@@ -75,23 +76,22 @@ function PaymentContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12 px-4">
-      <header className="container mx-auto mb-8">
-        <div className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--navy)' }}>
-            <span className="text-white font-bold text-xl">A</span>
-          </div>
-          <div>
-            <div className="font-bold text-lg" style={{ color: 'var(--navy)' }}>Adaepro</div>
-            <div className="text-xs text-gray-500">Compétences Managériales</div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-12 px-4">
+      <header className="container mx-auto mb-8 flex justify-center">
+        <Image 
+          src="/logo.png" 
+          alt="Adaepro Logo" 
+          width={240} 
+          height={91}
+          priority
+          className="h-auto"
+        />
       </header>
 
       <div className="container mx-auto max-w-3xl">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl" style={{ color: 'var(--navy)' }}>
+            <CardTitle className="text-2xl text-gray-900">
               Finaliser votre inscription
             </CardTitle>
             <CardDescription>
@@ -101,7 +101,7 @@ function PaymentContent() {
           <CardContent className="space-y-6">
             {/* Récapitulatif */}
             <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="font-semibold mb-4" style={{ color: 'var(--navy)' }}>
+              <h3 className="font-semibold mb-4 text-gray-900">
                 Récapitulatif de votre commande
               </h3>
               <div className="space-y-2">
@@ -121,14 +121,14 @@ function PaymentContent() {
                 </div>
                 <div className="border-t pt-2 flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span style={{ color: 'var(--red)' }}>49,00 €</span>
+                  <span className="text-orange-500">49,00 €</span>
                 </div>
               </div>
             </div>
 
             {/* Options de paiement */}
             <div className="space-y-4">
-              <h3 className="font-semibold" style={{ color: 'var(--navy)' }}>
+              <h3 className="font-semibold text-gray-900">
                 Choisissez votre mode de paiement
               </h3>
 
