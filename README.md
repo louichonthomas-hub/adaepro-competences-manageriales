@@ -119,3 +119,5 @@ yarn prisma db push
 ---
 
 **Note**: Ce projet utilise le App Router de Next.js 14.2+ avec une structure optimisée pour Vercel.
+
+<!-- Version 1.1 - Thème anthracite -->
