@@ -137,7 +137,7 @@ function ResultsContent() {
                 Félicitations {result.candidate.firstName} !
               </h1>
               <p className="text-gray-600 mb-6">Vous avez complété l'évaluation de vos compétences managériales</p>
-              <div className="inline-block p-8 bg-gradient-to-br from-blue-50 to-red-50 rounded-lg">
+              <div className="inline-block p-8 bg-gradient-to-br from-gray-50 to-red-50 rounded-lg">
                 <div className="text-6xl font-bold mb-2" style={{ color: 'var(--navy)' }}>
                   {result.percentageScore.toFixed(1)}%
                 </div>

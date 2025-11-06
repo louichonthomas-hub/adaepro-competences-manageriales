@@ -83,7 +83,7 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
 
   if (isLoading || !result) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
         <Loader2 className="w-12 h-12 animate-spin text-amber-400" />
       </div>
     );
@@ -125,7 +125,7 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 py-12 px-4">
       <div className="container mx-auto max-w-7xl">
         
         {/* Header avec logo */}
@@ -176,8 +176,8 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
                   <div className="text-3xl font-bold text-amber-600 mb-2">{strongPoints.length}</div>
                   <div className="text-sm font-medium text-slate-600">Points Forts Identifiés</div>
                 </div>
-                <div className="p-6 bg-white rounded-xl shadow-md border-l-4 border-blue-500">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">{vigilancePoints.length}</div>
+                <div className="p-6 bg-white rounded-xl shadow-md border-l-4 border-gray-500">
+                  <div className="text-3xl font-bold text-gray-600 mb-2">{vigilancePoints.length}</div>
                   <div className="text-sm font-medium text-slate-600">Points de Vigilance</div>
                 </div>
                 <div className="p-6 bg-white rounded-xl shadow-md border-l-4 border-slate-500">
@@ -302,8 +302,8 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
                   statusColor = 'text-amber-700';
                 } else if (percentage >= 60) {
                   status = 'Compétence Solide';
-                  statusIcon = <CheckCircle2 className="w-5 h-5 text-blue-500" />;
-                  statusColor = 'text-blue-700';
+                  statusIcon = <CheckCircle2 className="w-5 h-5 text-gray-500" />;
+                  statusColor = 'text-gray-700';
                 } else {
                   status = 'Axe de Développement Prioritaire';
                   statusIcon = <Target className="w-5 h-5 text-slate-500" />;
@@ -405,10 +405,10 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
 
         {/* Points de Vigilance */}
         {vigilancePoints.length > 0 && (
-          <Card className="mb-8 border-0 shadow-2xl bg-gradient-to-br from-blue-50 to-white">
-            <CardHeader className="border-b bg-gradient-to-r from-blue-100 to-blue-50">
-              <CardTitle className="flex items-center gap-2 text-blue-900">
-                <ShieldAlert className="w-7 h-7 text-blue-600" />
+          <Card className="mb-8 border-0 shadow-2xl bg-gradient-to-br from-gray-50 to-white">
+            <CardHeader className="border-b bg-gradient-to-r from-gray-100 to-gray-50">
+              <CardTitle className="flex items-center gap-2 text-gray-900">
+                <ShieldAlert className="w-7 h-7 text-gray-600" />
                 Points de Vigilance – Compétences à Consolider
               </CardTitle>
             </CardHeader>
@@ -419,22 +419,22 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
               </p>
               <div className="space-y-6">
                 {vigilancePoints.map((point, index) => (
-                  <div key={point.id} className="bg-white rounded-xl p-6 border-l-4 border-blue-500 shadow-md">
+                  <div key={point.id} className="bg-white rounded-xl p-6 border-l-4 border-gray-500 shadow-md">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <AlertTriangle className="w-6 h-6 text-blue-600" />
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                        <AlertTriangle className="w-6 h-6 text-gray-600" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-3">
                           <h3 className="text-xl font-bold text-slate-900">{point.name}</h3>
-                          <span className="text-3xl font-bold text-blue-600">{point.score}%</span>
+                          <span className="text-3xl font-bold text-gray-600">{point.score}%</span>
                         </div>
                         <p className="text-slate-700 leading-relaxed mb-4">
                           Cette compétence est déjà bien présente dans votre pratique managériale. Pour la porter au niveau d'excellence, 
                           concentrez-vous sur des ajustements ciblés et des pratiques plus régulières.
                         </p>
-                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-                          <h4 className="font-semibold text-blue-900 mb-2">Actions Recommandées :</h4>
+                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                          <h4 className="font-semibold text-gray-900 mb-2">Actions Recommandées :</h4>
                           <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
                             <li>Sollicitez du feedback régulier de vos pairs et collaborateurs</li>
                             <li>Identifiez 2-3 situations concrètes où renforcer cette pratique</li>
@@ -519,26 +519,26 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
                             </ul>
                           </div>
 
-                          <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg p-5 border border-blue-200">
-                            <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                          <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-5 border border-gray-200">
+                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
                               <Target className="w-5 h-5" />
                               Plan d'Actions Moyen Terme (3-12 mois)
                             </h4>
                             <ul className="space-y-2 text-slate-700 text-sm">
                               <li className="flex items-start gap-2">
-                                <span className="text-blue-500 font-bold">•</span>
+                                <span className="text-gray-500 font-bold">•</span>
                                 <span>Suivez une formation certifiante dans ce domaine</span>
                               </li>
                               <li className="flex items-start gap-2">
-                                <span className="text-blue-500 font-bold">•</span>
+                                <span className="text-gray-500 font-bold">•</span>
                                 <span>Pilotez un projet mobilisant cette compétence</span>
                               </li>
                               <li className="flex items-start gap-2">
-                                <span className="text-blue-500 font-bold">•</span>
+                                <span className="text-gray-500 font-bold">•</span>
                                 <span>Établissez des rituels de pratique régulière</span>
                               </li>
                               <li className="flex items-start gap-2">
-                                <span className="text-blue-500 font-bold">•</span>
+                                <span className="text-gray-500 font-bold">•</span>
                                 <span>Mesurez vos progrès avec des indicateurs précis</span>
                               </li>
                             </ul>

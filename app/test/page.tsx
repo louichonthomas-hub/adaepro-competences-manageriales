@@ -3,12 +3,8 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Loader2, ChevronLeft } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 
 interface Question {
   id: number;
@@ -40,7 +36,6 @@ function TestContent() {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [isAutoAdvancing, setIsAutoAdvancing] = useState(false);
 
   useEffect(() => {
     if (!candidateId) {
@@ -119,8 +114,6 @@ function TestContent() {
   };
 
   const handleAnswer = async (value: number) => {
-    if (isAutoAdvancing) return;
-    
     const currentQuestion = allQuestions[currentQuestionIndex];
     if (!currentQuestion) return;
 
@@ -129,7 +122,6 @@ function TestContent() {
     setAnswers(newAnswers);
 
     // Auto-avancer après 600ms
-    setIsAutoAdvancing(true);
     setTimeout(async () => {
       await saveProgress();
       
@@ -139,12 +131,11 @@ function TestContent() {
         // Terminer le test
         await handleSubmit(newAnswers);
       }
-      setIsAutoAdvancing(false);
     }, 600);
   };
 
   const handlePrevious = () => {
-    if (currentQuestionIndex > 0 && !isAutoAdvancing) {
+    if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
@@ -194,8 +185,11 @@ function TestContent() {
 
   if (isLoading || !testData || allQuestions.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400">
-        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#2c2c2c] to-[#1a1a1a]">
+        <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-[#2c2c2c] mx-auto" />
+          <p className="mt-4 text-gray-700 font-medium">Chargement...</p>
+        </div>
       </div>
     );
   }
@@ -211,95 +205,103 @@ function TestContent() {
   const currentAnswer = answers[questionKey] || 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400 py-8 px-4">
-      <div className="container mx-auto max-w-4xl">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center">
-                <span className="text-blue-900 font-bold text-xl">A</span>
-              </div>
-              <div>
-                <div className="font-bold text-lg text-white">Adaepro</div>
-                <div className="text-xs text-blue-100">Évaluation en cours</div>
-              </div>
-            </div>
-            <div className="text-sm text-blue-50 font-medium">
-              Question {currentQuestionIndex + 1} / {totalQuestions}
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#2c2c2c] to-[#1a1a1a] py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <div className="bg-white rounded-lg px-8 py-4 shadow-lg">
+            <Image 
+              src="/logo.png" 
+              alt="Adaepro Logo" 
+              width={220} 
+              height={83}
+              className="h-auto"
+            />
           </div>
-          <Progress value={progressPercentage} className="h-2 bg-blue-800" />
+        </div>
+        
+        {/* Progress Header */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex justify-between items-center mb-2">
+            <h1 className="text-2xl font-bold text-[#2c2c2c]">
+              Questionnaire
+            </h1>
+            <span className="text-sm text-gray-600 font-medium">
+              Question {currentQuestionIndex + 1}/{totalQuestions}
+            </span>
+          </div>
+          
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div
+              className="bg-[#2c2c2c] h-3 rounded-full transition-all duration-300"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+          
+          <p className="text-xs text-gray-500 mt-2 text-right">
+            Progression : {Math.round(progressPercentage)}%
+          </p>
         </div>
 
         {/* Question Card */}
-        <Card className="shadow-2xl">
-          <CardContent className="p-8">
-            <div className="mb-8">
-              <p className="text-2xl font-medium text-gray-800 leading-relaxed">
-                {currentQuestion.text}
-              </p>
-            </div>
-
-            {/* Scale */}
-            <RadioGroup
-              value={currentAnswer.toString()}
-              onValueChange={(value) => !isAutoAdvancing && handleAnswer(parseInt(value))}
-              disabled={isAutoAdvancing}
-            >
-              <div className="space-y-3">
-                {[1, 2, 3, 4, 5].map((value) => (
+        <div className="bg-white rounded-lg shadow-lg p-8 border-l-4 border-[#2c2c2c]">
+          <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">
+            {currentQuestion.text}
+          </h2>
+          
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((value) => {
+              const isSelected = currentAnswer === value;
+              
+              return (
+                <button
+                  key={value}
+                  onClick={() => handleAnswer(value)}
+                  className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left flex items-center gap-3 hover:bg-gray-50 ${
+                    isSelected
+                      ? 'border-[#2c2c2c] bg-gray-100'
+                      : 'border-gray-300'
+                  }`}
+                >
                   <div
-                    key={value}
-                    className={`flex items-center space-x-3 p-5 rounded-lg border-2 cursor-pointer transition-all ${
-                      currentAnswer === value
-                        ? 'border-orange-500 bg-orange-50 scale-105'
-                        : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
-                    } ${isAutoAdvancing ? 'opacity-50 pointer-events-none' : ''}`}
-                    onClick={() => !isAutoAdvancing && handleAnswer(value)}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      isSelected
+                        ? 'border-[#2c2c2c] bg-[#2c2c2c]'
+                        : 'border-gray-400'
+                    }`}
                   >
-                    <RadioGroupItem 
-                      value={value.toString()} 
-                      id={`answer-${value}`}
-                      disabled={isAutoAdvancing}
-                    />
-                    <Label htmlFor={`answer-${value}`} className="flex-1 cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-lg">{value}</span>
-                        <span className="text-base text-gray-700">
-                          {testData.scale.labels[value.toString()]}
-                        </span>
-                      </div>
-                    </Label>
+                    {isSelected && (
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    )}
                   </div>
-                ))}
-              </div>
-            </RadioGroup>
+                  <span className="font-medium text-gray-700 flex-1 flex items-center justify-between">
+                    <span className="font-semibold">{value}</span>
+                    <span>{testData.scale.labels[value.toString()]}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          
+          {currentQuestionIndex > 0 && (
+            <button
+              onClick={handlePrevious}
+              className="mt-6 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-all duration-200"
+            >
+              ← Précédent
+            </button>
+          )}
 
-            {/* Navigation */}
-            <div className="flex gap-4 mt-8">
-              <Button
-                onClick={handlePrevious}
-                disabled={currentQuestionIndex === 0 || isAutoAdvancing}
-                variant="outline"
-                className="flex-1 bg-gray-200 text-gray-600 hover:bg-gray-300 border-gray-300"
-              >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                Précédent
-              </Button>
+          {isSaving && (
+            <div className="text-center text-sm text-gray-500 mt-4 flex items-center justify-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Sauvegarde en cours...
             </div>
-
-            {(isSaving || isAutoAdvancing) && (
-              <div className="text-center text-sm text-gray-500 mt-4 flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                {isAutoAdvancing ? 'Passage à la question suivante...' : 'Sauvegarde en cours...'}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </div>
 
         {/* Progress Info */}
-        <div className="mt-4 text-center text-sm text-blue-100">
+        <div className="mt-4 text-center text-sm text-gray-300">
           {answeredCount} question{answeredCount > 1 ? 's' : ''} répondue{answeredCount > 1 ? 's' : ''}
         </div>
       </div>
@@ -310,7 +312,7 @@ function TestContent() {
 export default function TestPage() {
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-400">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#2c2c2c] to-[#1a1a1a]">
         <Loader2 className="w-8 h-8 animate-spin text-white" />
       </div>
     }>
