@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Image from 'next/image';
 
 export default function IdentificationPage() {
   const router = useRouter();
@@ -26,7 +27,6 @@ export default function IdentificationPage() {
     setIsLoading(true);
 
     try {
-      // Créer ou récupérer le candidat
       const response = await fetch('/api/candidate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -39,11 +39,9 @@ export default function IdentificationPage() {
 
       const data = await response.json();
 
-      // Si le candidat a déjà payé, aller directement au test
       if (data.hasPaid) {
         router.push(`/test?candidateId=${data.id}`);
       } else {
-        // Sinon, aller à la page de paiement
         router.push(`/payment?candidateId=${data.id}`);
       }
     } catch (err) {
@@ -56,17 +54,16 @@ export default function IdentificationPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12 px-4">
-      {/* Header */}
-      <header className="container mx-auto mb-8">
-        <div className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
-            <span className="text-white font-bold text-xl">A</span>
-          </div>
-          <div>
-            <div className="font-bold text-lg text-gray-800">Adaepro</div>
-            <div className="text-xs text-gray-500">Test de Compétences Managériales</div>
-          </div>
-        </div>
+      {/* Header avec Logo */}
+      <header className="container mx-auto mb-8 flex justify-center">
+        <Image 
+          src="/logo.png" 
+          alt="Adaepro Logo" 
+          width={240} 
+          height={91}
+          priority
+          className="h-auto"
+        />
       </header>
 
       <div className="container mx-auto max-w-2xl">
