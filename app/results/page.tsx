@@ -137,7 +137,7 @@ function ResultsContent() {
                 Félicitations {result.candidate.firstName} !
               </h1>
               <p className="text-gray-600 mb-6">Vous avez complété l'évaluation de vos compétences managériales</p>
-              <div className="inline-block p-8 bg-gradient-to-br from-gray-50 to-red-50 rounded-lg">
+              <div className="inline-block p-8 bg-gradient-to-br from-blue-50 to-red-50 rounded-lg">
                 <div className="text-6xl font-bold mb-2" style={{ color: 'var(--navy)' }}>
                   {result.percentageScore.toFixed(1)}%
                 </div>
@@ -153,16 +153,17 @@ function ResultsContent() {
             <CardTitle style={{ color: 'var(--navy)' }}>Profil de Compétences</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-96">
+            <div className="h-96 flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarChartData}>
+                <RadarChart data={radarChartData} cx="50%" cy="50%" outerRadius="70%">
                   <PolarGrid />
                   <PolarAngleAxis dataKey="dimension" />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} />
                   <Radar
                     name="Score"
                     dataKey="score"
-                    stroke="#E30613"
+                    stroke="#FF8C00"
+                    strokeWidth={1.5}
                     fill="#E30613"
                     fillOpacity={0.6}
                   />
